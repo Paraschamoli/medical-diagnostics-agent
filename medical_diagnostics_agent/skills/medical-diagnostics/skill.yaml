@@ -5,13 +5,17 @@ author: paras@getbindu.com
 
 # Description
 description: |
-  Description of the medical-diagnostics skill.
-  TODO: Update this description with your skill's purpose and capabilities.
+  Multi-specialist medical diagnostic analysis using coordinated AI agents.
+  Analyzes patient cases from cardiology, pulmonology, and psychology perspectives.
 
 # Tags and Modes
 tags:
   - medical-diagnostics
-  - TODO-add-relevant-tags
+  - healthcare-analysis
+  - multi-specialist
+  - cardiology
+  - pulmonology
+  - psychology
 
 input_modes:
   - text/plain
@@ -23,36 +27,42 @@ output_modes:
 
 # Example Queries
 examples:
-  - "TODO: Add example query 1"
-  - "TODO: Add example query 2"
-  - "TODO: Add example query 3"
+  - "Analyze this patient case: 48-year-old male with chest tightness, shortness of breath, BP 148/92, HR 96 bpm"
+  - "Evaluate patient with persistent fatigue, rapid heartbeat, anxiety, and poor sleep quality"
+  - "Multi-specialist diagnostic analysis for patient with respiratory and cardiac symptoms"
 
 # Detailed Capabilities
 capabilities_detail:
   primary_capability:
     supported: true
-    description: "TODO: Describe your primary capability"
+    description: "Multi-specialist medical diagnostic analysis using three coordinated AI agents"
     features:
-      - "TODO: Feature 1"
-      - "TODO: Feature 2"
-    limitations: "TODO: List any limitations"
+      - "Cardiologist agent analyzes cardiac workup and cardiovascular risks"
+      - "Psychologist agent evaluates mental health and stress factors"
+      - "Pulmonologist agent assesses respiratory conditions"
+      - "Multidisciplinary synthesis produces top 3 possible diagnoses"
+    limitations: "Requires OpenRouter API key, processes text-based patient reports only, no image analysis"
 
   secondary_capability:
     supported: false
-    planned_version: "TODO: Future version"
-    description: "TODO: Planned feature description"
+    planned_version: "2.0.0"
+    description: "Not supported by code"
 
 # Requirements
 requirements:
   packages:
-    - "TODO: Add required Python packages"
+    - "langchain-openai"
+    - "langchain-core"
+    - "pydantic"
+    - "bindu"
+    - "python-dotenv"
   system:
-    - "TODO: Add system dependencies if any"
+    - "Python 3.12+"
   min_memory_mb: 256
 
 # Performance Metrics
 performance:
-  avg_processing_time_ms: 1000
+  avg_processing_time_ms: 15000
   max_concurrent_requests: 10
   memory_per_request_mb: 256
   scalability: horizontal
@@ -66,159 +76,229 @@ allowed_tools:
 # Rich Documentation
 documentation:
   overview: |
-    TODO: Provide a comprehensive overview of your skill.
-    Describe what it does, how it works, and what makes it useful.
-    Include information about the underlying technologies or approaches used.
+    Multi-agent system that coordinates three specialist AI agents (Cardiologist, Psychologist, Pulmonologist)
+    to analyze patient medical reports. Each specialist agent independently reviews the patient case from their
+    domain perspective, then a MultidisciplinaryTeam agent synthesizes all reports into a final diagnosis
+    with top 3 possible health issues. Built on LangChain with OpenRouter models (default: gpt-4o).
 
   use_cases:
     when_to_use:
-      - "TODO: Scenario 1 when this skill should be used"
-      - "TODO: Scenario 2 when this skill should be used"
-      - "TODO: Scenario 3 when this skill should be used"
+      - "Multi-perspective medical case analysis requiring cardiology, psychology, and pulmonology input"
+      - "Patient symptom evaluation with vital signs and lab results"
+      - "Diagnostic support for complex cases with overlapping symptoms"
+      - "Second opinion generation from multiple specialist viewpoints"
 
     when_not_to_use:
-      - "TODO: Scenario when this skill should NOT be used"
-      - "TODO: Alternative skill or approach for those scenarios"
-      - "TODO: Limitations or constraints"
+      - "Real-time emergency medical decisions"
+      - "Medical image analysis (X-rays, CT scans, MRIs)"
+      - "Specialties outside cardiology, psychology, pulmonology"
+      - "Legal medical documentation or prescriptions"
 
   input_structure: |
-    TODO: Describe the expected input format for your skill.
+    JSON-RPC 2.0 message with patient case description in text format.
 
     Example:
     {
-      "parameter1": "value1",
-      "parameter2": "value2",
-      "options": {
-        "option1": true,
-        "option2": "value"
-      }
+      "jsonrpc": "2.0",
+      "method": "message/send",
+      "params": {
+        "message": {
+          "role": "user",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "Patient profile: 48-year-old male with chest tightness, shortness of breath, BP 148/92 mmHg, HR 96 bpm, O2 sat 94%, BMI 29. Labs: LDL 155 mg/dL, HDL 40 mg/dL, triglycerides 210 mg/dL, glucose 118 mg/dL."
+            }
+          ],
+          "kind": "message",
+          "messageId": "f6b8c930-5616-49ad-b187-d93cbbC00001",
+          "contextId": "f6b8c930-5616-49ad-b187-d93cbbC00002",
+          "taskId": "f6b8c930-5616-49ad-b187-d93cbbC00003"
+        },
+        "skillId": "medical-diagnostics-v1",
+        "configuration": {
+          "acceptedOutputModes": ["application/json"]
+        }
+      },
+      "id": "f6b8c930-5616-49ad-b187-d93cbbC00003"
     }
 
     Constraints:
-    - TODO: List input constraints
-    - TODO: Validation rules
-    - TODO: Supported formats
+    - Text-based patient reports only
+    - Must include patient symptoms and relevant clinical data
+    - No structured format required, natural language accepted
 
   output_format: |
-    TODO: Describe the output format your skill produces.
+    JSON-RPC 2.0 result with task history and artifacts containing markdown-formatted diagnosis.
 
     Success Response:
     {
-      "success": true,
+      "jsonrpc": "2.0",
+      "id": "f6b8c930-5616-49ad-b187-d93cbbc00004",
       "result": {
-        "data": "TODO: Your result data",
-        "metadata": {
-          "processing_time_ms": 1000,
-          "additional_info": "value"
-        }
+        "id": "f6b8c930-5616-49ad-b187-d93cbbc00003",
+        "context_id": "f6b8c930-5616-49ad-b187-d93cbbc00002",
+        "kind": "task",
+        "status": {
+          "state": "completed",
+          "timestamp": "2026-03-11T09:16:33.732766+00:00"
+        },
+        "history": [
+          {
+            "role": "assistant",
+            "parts": [
+              {
+                "kind": "text",
+                "text": "### Final Diagnosis:\n\n- **Hypertension and Dyslipidemia:** ...\n- **Obstructive Sleep Apnea (OSA):** ...\n- **Anxiety and Stress:** ...\n\n---\n*Analysis performed by AI Medical Diagnostics Agent*\n*Specialist inputs: Cardiologist, Psychologist, Pulmonologist*\n*Model: gpt-4o*"
+              }
+            ]
+          }
+        ],
+        "artifacts": [
+          {
+            "name": "result",
+            "parts": [{"kind": "text", "text": "Markdown formatted diagnosis"}]
+          }
+        ]
       }
     }
 
     Error Response:
     {
-      "success": false,
-      "error": {
-        "code": "ERROR_CODE",
-        "message": "Error description"
+      "jsonrpc": "2.0",
+      "result": {
+        "history": [
+          {
+            "role": "assistant",
+            "parts": [{"kind": "text", "text": "Error during medical diagnosis: <error message>"}]
+          }
+        ]
       }
     }
 
   error_handling:
-    - "TODO: Error type 1 and how it's handled"
-    - "TODO: Error type 2 and how it's handled"
-    - "TODO: Timeout behavior and fallback strategies"
-    - "TODO: Validation errors and user feedback"
-    - "TODO: Resource limit handling"
+    - "Missing API key: Returns ValueError with setup instructions"
+    - "Empty patient report: Returns error message requesting medical report"
+    - "Agent execution errors: Caught and returned as formatted error strings"
+    - "LangChain chain failures: Logged and returned with error prefix"
+    - "No timeout mechanism implemented in current version"
 
   examples:
-    - title: "TODO: Example 1 Title"
+    - title: "Multi-specialist cardiac and respiratory case"
       input:
-        parameter1: "value1"
-        parameter2: "value2"
+        parts:
+          - kind: "text"
+            text: "48-year-old male with chest tightness, shortness of breath during mild exertion, BP 148/92 mmHg, HR 96 bpm, O2 sat 94%, BMI 29, LDL 155 mg/dL, HDL 40 mg/dL, triglycerides 210 mg/dL, glucose 118 mg/dL, elevated stress, poor sleep, mild anxiety"
       output:
-        success: true
-        result:
-          data: "example output"
-        metadata:
-          processing_time_ms: 500
+        text: |
+          ### Final Diagnosis:
 
-    - title: "TODO: Example 2 Title"
+          - **Hypertension and Dyslipidemia:** Elevated blood pressure and abnormal lipid levels indicate cardiovascular risk factors for coronary artery disease
+
+          - **Obstructive Sleep Apnea (OSA):** Poor sleep quality and elevated BMI suggest OSA, contributing to respiratory insufficiency and low oxygen saturation
+
+          - **Anxiety and Stress:** Mild anxiety symptoms and elevated stress levels exacerbate physical symptoms like chest tightness and shortness of breath
+
+          ---
+          *Analysis performed by AI Medical Diagnostics Agent*
+          *Specialist inputs: Cardiologist, Psychologist, Pulmonologist*
+          *Model: gpt-4o*
+
+    - title: "Fatigue and anxiety case with anemia"
       input:
-        parameter1: "different_value"
-        options:
-          option1: true
+        parts:
+          - kind: "text"
+            text: "35-year-old female with persistent fatigue, intermittent shortness of breath, rapid heartbeat during mild activity, increased anxiety, chest discomfort, poor sleep, difficulty concentrating. BP 135/88 mmHg, HR 102 bpm, O2 sat 95%, BMI 26, Hemoglobin 11.2 g/dL, LDL 130 mg/dL, Vitamin D 20 ng/mL"
       output:
-        success: true
-        result:
-          data: "example output 2"
-        metadata:
-          processing_time_ms: 750
+        text: |
+          ### Final Diagnosis:
+
+          - **Anemia:** Hemoglobin level of 11.2 g/dL indicates anemia, leading to fatigue, shortness of breath, and palpitations due to reduced oxygen-carrying capacity
+
+          - **Anxiety Disorder:** Rapid heartbeat, poor sleep quality, and difficulty concentrating are consistent with anxiety disorder
+
+          - **Asthma or Respiratory Condition:** Intermittent shortness of breath and chest discomfort suggest possible asthma, with mild hypoxemia (O2 sat 95%)
+
+          ---
+          *Analysis performed by AI Medical Diagnostics Agent*
+          *Specialist inputs: Cardiologist, Psychologist, Pulmonologist*
+          *Model: gpt-4o*
 
   best_practices:
     for_developers:
-      - "TODO: Best practice 1 for implementing this skill"
-      - "TODO: Best practice 2 for error handling"
-      - "TODO: Best practice 3 for performance optimization"
-      - "TODO: Best practice 4 for testing and validation"
+      - "Use async/await pattern for all agent operations"
+      - "Set OPENROUTER_API_KEY environment variable before initialization"
+      - "Handle agent errors gracefully with try-except blocks"
+      - "Test with various patient case formats and edge cases"
 
     for_orchestrators:
-      - "TODO: When to route requests to this skill"
-      - "TODO: How to chain this skill with others"
-      - "TODO: Performance considerations for load balancing"
-      - "TODO: Retry and fallback strategies"
-      - "TODO: Monitoring and observability recommendations"
+      - "Route multi-specialist medical diagnostic requests to this skill"
+      - "Expect 10-20 second processing time for concurrent agent execution"
+      - "Match queries containing cardiology, pulmonology, or psychology keywords"
+      - "Implement retry logic for API failures"
+      - "Monitor OpenRouter API usage and rate limits"
 
   installation: |
-    TODO: Provide installation instructions for your skill.
+    Install via uv package manager or pip.
 
     Required packages:
-    pip install <your-package-name>
+    uv sync
 
-    Optional dependencies:
-    # TODO: Add platform-specific installation steps if needed
-    # macOS
-    brew install <dependency>
+    Environment variables:
+    OPENROUTER_API_KEY=<your-openrouter-key>
+    MODEL_NAME=gpt-4o (optional, defaults to gpt-4o)
 
-    # Ubuntu/Debian
-    apt-get install <dependency>
+    Run:
+    uv run python -m medical_diagnostics_agent
 
-    # Windows
-    # TODO: Windows-specific instructions
+    Server runs on http://127.0.0.1:3773 by default
 
   versioning:
     - version: "1.0.0"
-      date: "TODO: Release date"
-      changes: "Initial release with core functionality"
+      date: "2026-03-11"
+      changes: "Initial release with Cardiologist, Psychologist, Pulmonologist agents and MultidisciplinaryTeam synthesis"
     - version: "1.1.0"
       status: "planned"
-      changes: "TODO: Planned enhancements for next version"
+      changes: "Not supported by code"
 
 # Assessment fields for skill negotiation
 assessment:
   keywords:
-    - "TODO: keyword1"
-    - "TODO: keyword2"
-    - "TODO: keyword3"
-    - "TODO: Add relevant keywords for skill matching"
+    - "medical"
+    - "diagnosis"
+    - "diagnostic"
+    - "patient"
+    - "cardiology"
+    - "cardiologist"
+    - "psychology"
+    - "psychologist"
+    - "pulmonology"
+    - "pulmonologist"
+    - "symptoms"
+    - "health"
+    - "clinical"
+    - "vital signs"
+    - "lab results"
 
   specializations:
-    - domain: "TODO: domain1"
+    - domain: "medical-diagnostics"
       confidence_boost: 0.3
-    - domain: "TODO: domain2"
+    - domain: "healthcare-analysis"
       confidence_boost: 0.2
 
   anti_patterns:
-    - "TODO: Pattern that should NOT match this skill"
-    - "TODO: Alternative skill name or approach"
-    - "TODO: Out of scope operations"
+    - "Medical image analysis or radiology"
+    - "Prescription generation or medication dosing"
+    - "Emergency medical decisions"
+    - "Specialties outside cardiology, psychology, pulmonology"
 
   complexity_indicators:
     simple:
-      - "TODO: Simple task indicator 1"
-      - "TODO: Simple task indicator 2"
+      - "Single symptom evaluation"
+      - "Basic vital signs review"
     medium:
-      - "TODO: Medium complexity indicator 1"
-      - "TODO: Medium complexity indicator 2"
+      - "Multi-symptom patient case with vital signs and lab results"
+      - "Diagnostic analysis from specific specialist perspective"
     complex:
-      - "TODO: Complex task indicator 1"
-      - "TODO: Complex task indicator 2"
+      - "Complex multi-system cases requiring all three specialists"
+      - "Cases with extensive lab work and multiple risk factors"
