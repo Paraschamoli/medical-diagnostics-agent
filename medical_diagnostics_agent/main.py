@@ -118,23 +118,18 @@ async def initialize_agent() -> None:
     """Initialize medical diagnostics agent with proper model."""
     global agent
 
-    # Get API keys from environment
-    openai_api_key = os.getenv("OPENAI_API_KEY")
+    # Get API key from environment (only supports OpenRouter)
     openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
     model_name = os.getenv("MODEL_NAME", "openai/gpt-4o")
 
-    # Model selection logic
+    # Model selection logic (only OpenRouter)
     if openrouter_api_key:
         agent = MedicalDiagnosticsAgent(model_name)
         print(f"✅ Using OpenRouter model: {model_name}")
-    elif openai_api_key:
-        agent = MedicalDiagnosticsAgent()
-        print("✅ Using OpenAI model: gpt-4o")
     else:
         # Define error message separately to avoid TRY003
         error_msg = (
-            "No API key provided. Set OPENAI_API_KEY or OPENROUTER_API_KEY environment variable.\n"
-            "For OpenAI: https://platform.openai.com/api-keys\n"
+            "No API key provided. Set OPENROUTER_API_KEY environment variable.\n"
             "For OpenRouter: https://openrouter.ai/keys"
         )
         raise ValueError(error_msg)
