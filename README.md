@@ -111,8 +111,8 @@ The agent processes comprehensive medical reports and provides multi-specialist 
 
 **Example Medical Report:**
 ```
-Patient presents with chest pain, heart palpitations, shortness of breath, 
-dizziness, and sweating episodes over the past 3 months. Episodes last 
+Patient presents with chest pain, heart palpitations, shortness of breath,
+dizziness, and sweating episodes over the past 3 months. Episodes last
 10-20 minutes and occur without warning, typically once or twice a week...
 ```
 
@@ -353,9 +353,9 @@ uv run pre-commit run -a
 Contributions are welcome! Please follow these steps:
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature` 
-3. Commit your changes: `git commit -m 'Add amazing feature'` 
-4. Push to the branch: `git push origin feature/amazing-feature` 
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
@@ -373,7 +373,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **IMPORTANT**: This Medical Diagnostics Agent is intended for research and educational purposes only. It is **NOT** a substitute for professional medical advice, diagnosis, or treatment.
 
 - ❌ **Do not use** for clinical decision-making
-- ❌ **Do not use** for emergency medical situations  
+- ❌ **Do not use** for emergency medical situations
 - ❌ **Do not use** for patient diagnosis without professional oversight
 - ✅ **Use for** medical education and research
 - ✅ **Use for** understanding multi-agent AI systems
