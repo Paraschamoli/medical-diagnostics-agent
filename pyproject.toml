@@ -45,6 +45,7 @@ dev = [
     "mkdocs-material>=8.5.10",
     "mkdocstrings[python]>=0.26.1",
     "types-requests>=2.31.0",
+    "mypy>=1.0.0",
 ]
 
 [build-system]
@@ -126,3 +127,8 @@ skip_empty = true
 [tool.coverage.run]
 branch = true
 source = ["medical_diagnostics_agent"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+disable_error_code = ["call-arg", "arg-type"]
